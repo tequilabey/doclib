@@ -1,17 +1,27 @@
 [Unit]
-Description=VolHrs (SvelteKit adapter-node)
+# DocLib web application
+Description=DocLib (SvelteKit adapter-node)
 After=network.target
 
 [Service]
 Type=simple
 User=russ
 WorkingDirectory=/opt/lodge/doclib
-EnvironmentFile=/opt/lodge/doclib/.env
+
+# Load local environment if present; do not fail if missing
+EnvironmentFile=-/opt/lodge/doclib/.env
+
+# Safe defaults
 Environment=PORT=3000
 Environment=HOST=127.0.0.1
+Environment=NODE_ENV=production
+
+# Start built SvelteKit server
 ExecStart=/usr/bin/node build
+
 Restart=always
 RestartSec=2
 
 [Install]
 WantedBy=multi-user.target
+
