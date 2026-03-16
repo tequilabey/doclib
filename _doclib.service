@@ -12,12 +12,12 @@ WorkingDirectory=/opt/lodge/doclib
 EnvironmentFile=-/opt/lodge/doclib/.env
 
 # Safe defaults
-Environment=PORT=3000
+Environment=PORT=3001
 Environment=HOST=127.0.0.1
 Environment=NODE_ENV=production
 
 # Start built SvelteKit server
-ExecStart=/usr/bin/node build
+ExecStart=/usr/bin/node build/index.js
 
 Restart=always
 RestartSec=2
