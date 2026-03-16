@@ -1,0 +1,17 @@
+[Unit]
+Description=VolHrs (SvelteKit adapter-node)
+After=network.target
+
+[Service]
+Type=simple
+User=russ
+WorkingDirectory=/opt/lodge/doclib
+EnvironmentFile=/opt/lodge/doclib/.env
+Environment=PORT=3000
+Environment=HOST=127.0.0.1
+ExecStart=/usr/bin/node build
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
