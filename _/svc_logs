@@ -9,5 +9,4 @@ echo "=== Following logs for: $SERVICE (last $LINES lines) ==="
 echo "Press Ctrl+C to stop."
 echo
 
-sudo journalctl -u "$SERVICE" -n "$LINES" -f
-
+sudo journalctl -u "$SERVICE" -f

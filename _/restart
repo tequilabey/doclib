@@ -1,0 +1,26 @@
+#!/bin/bash
+set -euo pipefail
+
+SERVICE="doclib"
+APPDIR="/opt/lodge/doclib"
+
+echo "=== Service reset: $SERVICE ==="
+
+cd "$APPDIR"
+
+echo "Stopping service..."
+_/svc_stop
+
+sudo systemctl stop "$SERVICE"
+
+rm -rf build .svelte-kit
+
+npm run build
+
+sudo systemctl restart "$SERVICE"
+sleep 2
+
+sudo systemctl status "$SERVICE" --no-pager
+
+
+

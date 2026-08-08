@@ -1,0 +1,19 @@
+#!/bin/bash
+set -euo pipefail
+
+APPDIR="/opt/lodge/mbrs"
+SQLFILE="$APPDIR/sql/run_all.sql"
+
+source "$APPDIR/_/env.sh"
+
+echo "Applying SQL from: $SQLFILE"
+sqlcmd \
+  -C \
+  -S "$SQLCMD_SERVER" \
+  -d "$SQLCMD_DATABASE" \
+  -U "$SQLCMD_USER" \
+  -P "$SQLCMD_PASSWORD" \
+  -i "$SQLFILE"
+
+echo
+echo "Done."

@@ -2,26 +2,27 @@
 import "dotenv/config";
 import sql from "mssql";
 
-// Minimal, reliable pool singleton for SvelteKit SSR.
-let pool: sql.ConnectionPool | null = null;
+let pool: any = null;
 
-function getConfig(): sql.config {
-  // Prefer volhrs-style MSSQL_* vars
+function getConfig(): any {
   const server = process.env.MSSQL_HOST?.trim();
   const database = process.env.MSSQL_DB?.trim();
   const portRaw = process.env.MSSQL_PORT?.trim();
-  const user = process.env.MSSQL_USER?.trim();
-  const password = process.env.MSSQL_PASSWORD?.trim();
+
+  const user =
+    process.env.MSSQL_USER?.trim() ||
+    process.env.SQLSERVER_USER?.trim();
+
+  const password =
+    process.env.MSSQL_PASSWORD?.trim() ||
+    process.env.SQLSERVER_PASSWORD?.trim();
 
   if (!server || !database) {
-    throw new Error(
-      "Missing SQL config. Set MSSQL_HOST + MSSQL_DB (and MSSQL_PORT optional) plus SQLSERVER_USER/SQLSERVER_PASSWORD (or MSSQL_USER/MSSQL_PASSWORD)."
-    );
+    throw new Error("Missing SQL config. Set MSSQL_HOST and MSSQL_DB.");
   }
 
-  // If you keep username/password in SQLSERVER_USER/SQLSERVER_PASSWORD (like your .env currently does), that's fine.
   if (!user || !password) {
-    throw new Error("Missing SQL credentials. Set SQLSERVER_USER + SQLSERVER_PASSWORD (or MSSQL_USER + MSSQL_PASSWORD).");
+    throw new Error("Missing SQL credentials. Set MSSQL_USER/MSSQL_PASSWORD or SQLSERVER_USER/SQLSERVER_PASSWORD.");
   }
 
   return {
@@ -31,19 +32,17 @@ function getConfig(): sql.config {
     password,
     database,
     options: {
-      encrypt: false,              // local docker on same host; keep it simple
-      trustServerCertificate: true // avoids TLS/SNI weirdness
+      encrypt: false,
+      trustServerCertificate: true
     }
   };
 }
 
-export async function getPool(): Promise<sql.ConnectionPool> {
+export async function getPool(): Promise<any> {
   if (pool) return pool;
 
-  const config = getConfig();
-  pool = await sql.connect(config);
+  pool = await sql.connect(getConfig());
 
-  // If pool errors later, drop it so we can reconnect on next request
   pool.on("error", () => {
     pool = null;
   });

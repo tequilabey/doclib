@@ -1,0 +1,27 @@
+sudo cat > /etc/systemd/system/docintake-watch-a.service <<'EOF'
+[Unit]
+Description=DocLib incoming validation watcher A
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=russ
+Group=russ
+WorkingDirectory=/opt/lodge/doclib
+EnvironmentFile=-/opt/lodge/doclib/.env
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+[Service]
+Type=simple
+User=russ
+Group=russ
+WorkingDirectory=/opt/lodge/doclib
+EnvironmentFile=-/opt/lodge/doclib/.env
+
+[Install]
+WantedBy=multi-user.target
+EOF

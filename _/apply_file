@@ -1,0 +1,24 @@
+#!/bin/bash
+set -euo pipefail
+
+if [ $# -ne 1 ]; then
+  echo "Usage: $0 <sql-file>"
+  exit 1
+fi
+
+APPDIR="/opt/lodge/docintake"
+SQLFILE="$1"
+
+source "$APPDIR/_/env.sh"
+
+echo "Applying SQL file: $SQLFILE"
+sqlcmd \
+  -C \
+  -S "$SQLCMD_SERVER" \
+  -d "$SQLCMD_DATABASE" \
+  -U "$SQLCMD_USER" \
+  -P "$SQLCMD_PASSWORD" \
+  -i "$SQLFILE"
+
+echo
+echo "Done."
